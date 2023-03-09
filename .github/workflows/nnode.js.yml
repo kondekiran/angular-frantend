@@ -1,45 +1,28 @@
-# This workflow will Do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: Node.js CI
-
+name: Deploy master
 on:
   push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+    branches:
+    - master
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm install -g @angular/cli
-    - run: npm install
-    - run: ng build --configuration production
-    - name: Checkout Latest Repo
-      uses: actions/checkout@master
-    - name: Generate Deployment Package 
-      run: zip -r deploy.zip * -x "**node_modules**"
+
+    - name: Checkout source code
+      uses: actions/checkout@v2
+
+    - name: Generate deployment package
+      run: zip -r deploy.zip . -x '*.git*'
+
     - name: Deploy to EB
-      uses: angular-frantend/beanstalk-deploy@v16
+      uses: einaregilsson/beanstalk-deploy@v21
       with:
-           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
-           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-           region: us-east-1
-           application_name: Angularebs-env
-           environment_name: Angularebsenv-env.eba-wrwsc3we.us-east-1.elasticbeanstalk.com
-           version_label: "the-Angularebs-deployment-${{ steps.format-time.outputs.replaced }}"
-           deployment_package: deploy.zip
+        aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        application_name: Angularebs-env
+        environment_name: Angularebsenv-env
+        version_label: 18.x
+        region: us-east-1
+        deployment_package: deploy.zip
+
