@@ -1,4 +1,4 @@
-name: Deploy master
+name: angular-frantend
 on:
   push:
     branches:
@@ -16,16 +16,22 @@ jobs:
       run: zip -r deploy.zip . -x '*.git*'
 
     - name: Deploy to EB
-      uses: einaregilsson/beanstalk-deploy@v14
+      uses: einaregilsson/beanstalk-deploy@v2
       with:
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         application_name: Angularebs-env
         environment_name: Angularebsenv-env
-        version_label: 14.x
+        version_label: 16.x
         region: us-east-1
         deployment_package: deploy.zip
         use_existing_version_if_available: true
+        
+    - name: Download Artifact GitHub Action
+      uses: actions/download-artifact@v2
+      with:
+        name: artifacts
+        path: downloaded_artifacts
 
     - name: Upload Artifact GitHub Action
       uses: actions/upload-artifact@v2
