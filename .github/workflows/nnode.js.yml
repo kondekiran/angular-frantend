@@ -34,17 +34,12 @@ jobs:
     - name: Generate Deployment Package 
       run: zip -r deploy.zip * -x "**node_modules**"
     - name: Deploy to EB
-      uses: aws-actions/aws-elasticbeanstalk-deploy@v1
+      uses: angular-frantend/beanstalk-deploy@v16
       with:
-           environment-name: Angularebs-env
-           application-name: angular
-           deployment-package: deploy.zip
+           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
            region: us-east-1
-           version-label: "the-Angularebs-deployment-${{ steps.format-time.outputs.replaced }}"
-           access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-           secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    - name: Upload Artifact GitHub Action
-      uses: actions/upload-artifact@v2
-      with: 
-        name: artifacts
-        path: node_modules
+           application_name: angular
+           environment_name: Angularebs-env
+           version_label: "the-Angularebs-deployment-${{ steps.format-time.outputs.replaced }}"
+           deployment_package: deploy.zip
