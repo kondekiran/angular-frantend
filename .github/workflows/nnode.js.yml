@@ -22,7 +22,7 @@ jobs:
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         application_name: Angularebs-env
         environment_name: Angularebsenv-env
-        version_label: 14.x
+        version_label: 18.x
         region: us-east-1
         deployment_package: deploy.zip
         use_existing_version_if_available: true
