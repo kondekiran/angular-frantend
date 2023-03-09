@@ -34,12 +34,12 @@ jobs:
     - name: Generate Deployment Package 
       run: zip -r deploy.zip * -x "**node_modules**"
     - name: Deploy to EB
-      uses: angular-frantend/beanstalk-deploy@v16
+      uses: angular/beanstalk-deploy@v16
       with:
            aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
            aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
            region: us-east-1
-           application_name: angular
-           environment_name: Angularebs-env
+           application_name: Angularebs-env
+           environment_name: Angularebsenv-env.eba-wrwsc3we.us-east-1.elasticbeanstalk.com
            version_label: "the-Angularebs-deployment-${{ steps.format-time.outputs.replaced }}"
            deployment_package: deploy.zip
