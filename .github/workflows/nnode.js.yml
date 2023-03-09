@@ -16,7 +16,7 @@ jobs:
       run: zip -r deploy.zip . -x '*.git*'
 
     - name: Deploy to EB
-      uses: einaregilsson/beanstalk-deploy@v21
+      uses: einaregilsson/beanstalk-deploy@v18
       with:
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -25,4 +25,10 @@ jobs:
         version_label: 18.x
         region: us-east-1
         deployment_package: deploy.zip
+    - name: Upload Artifact GitHub Action
+      uses: actions/upload-artifact@v2
+      with: 
+        name: artifacts
+        path: node_modules
+        
 
